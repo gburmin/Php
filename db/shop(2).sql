@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 19 2022 г., 16:36
+-- Время создания: Апр 26 2022 г., 04:08
 -- Версия сервера: 8.0.24
 -- Версия PHP: 7.3.33
 
@@ -81,6 +81,34 @@ INSERT INTO `basket` (`id`, `session_id`, `product_id`, `priceInBasket`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int NOT NULL,
+  `session_id` text NOT NULL,
+  `phone` int NOT NULL,
+  `price` int NOT NULL,
+  `status` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `orders`
+--
+
+INSERT INTO `orders` (`id`, `session_id`, `phone`, `price`, `status`) VALUES
+(1, '123', 123, 245325, 'newOrder'),
+(2, 'l52h5bbmabniaqshud1q4kui7nb6dakm', 567, 379, 'onTheWay'),
+(3, 'l52h5bbmabniaqshud1q4kui7nb6dakm', 2434, 379, 'onTheWay'),
+(4, 'l6qc9l31utj8o286b7usm7vme355kp6s', 987654321, 100, 'onTheWay'),
+(5, '1qcu62j8opb6bgogsb9ganqd4oqtgdq9', 2323, 100, 'onTheWay'),
+(6, 'qv27rhg310m7egjfg9m4gqcc52ucm4sg', 0, 480, 'done'),
+(7, 'f9k3o12u227pobesj1csvkukuttna7h2', 987654321, 30, 'done'),
+(8, '5vuepcdkg0t2ignkn2386on16ifkqnba', 11111111, 150, 'newOrder');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `products`
 --
 
@@ -136,6 +164,12 @@ ALTER TABLE `basket`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `products`
 --
 ALTER TABLE `products`
@@ -157,6 +191,12 @@ ALTER TABLE `users`
 --
 ALTER TABLE `basket`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+
+--
+-- AUTO_INCREMENT для таблицы `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT для таблицы `products`
