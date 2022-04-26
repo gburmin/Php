@@ -6,10 +6,10 @@ use app\models\Basket;
 
 class BasketController extends Controller
 {
-    public function actionBasket()
+    public function actionIndex()
     {
         $basket = Basket::getBasket();
-        echo $this->render('basket/basket', [
+        echo $this->render('basket', [
             'basket' => $basket
         ]);
     }

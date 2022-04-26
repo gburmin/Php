@@ -8,6 +8,13 @@ abstract class DBModel extends Model
 {
     protected abstract static function getTableName();
 
+    //SELECT from users where login = admin
+    public static function getWhere($name, $value)
+    {
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM {$tableName} WHERE {$name} = :value";
+        return Db::getInstance()->queryOneObject($sql, ['value' => $value], static::class);
+    }
 
     public function insert()
     {
@@ -36,34 +43,26 @@ abstract class DBModel extends Model
     public function update()
     {
         $params = [];
-        $columns = [];
-        $columnsAndStatements = '';
-
-        foreach ($this->props as $key => $value) {
-
-            if ($value) {
-                $params[":" . $key] = $this->$key;
-                $columns[] = $key;
-            }
-        }
-
-        foreach (array_combine($columns, array_keys($params)) as $key => $value) {
-            $columnsAndStatements .= "$key = $value,";
-        }
-        $columnsAndStatements = mb_substr($columnsAndStatements, 0, -1);
-        $params['id'] = $this->id;
+        $colums = [];
 
         $tableName = static::getTableName();
-        $sql = "UPDATE `{$tableName}` SET $columnsAndStatements WHERE id=:id";
 
+        foreach ($this->props as $key => $value) {
+            if (!$value) continue;
+            $params["{$key}"] = $this->$key;
+            $colums[] .= "`{$key}` = :{$key}";
+            $this->props[$key] = false;
+        }
+        $colums = implode(", ", $colums);
+        $params['id'] = $this->id;
+
+        $sql = "UPDATE `{$tableName}` SET {$colums} WHERE `id` = :id";
         Db::getInstance()->execute($sql, $params);
         return $this;
-        //TODO сделать update в идеале оптимальный, формировать set только по изменившимся полям
     }
 
     public function save()
     {
-        //TODO реализовать умный save
         if (is_null($this->id)) {
             $this->insert();
         } else {
@@ -77,7 +76,6 @@ abstract class DBModel extends Model
         $sql = "DELETE FROM $tableName WHERE id = :id";
         return Db::getInstance()->execute($sql, ['id' => $this->id]);
     }
-
 
 
     public static function getOne($id)
@@ -94,7 +92,6 @@ abstract class DBModel extends Model
         $sql = "SELECT * FROM {$tableName}";
         return Db::getInstance()->queryAll($sql);
     }
-
 
     public static function getLimit($limit)
     {

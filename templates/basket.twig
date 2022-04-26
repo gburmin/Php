@@ -1,0 +1,14 @@
+<h2>Корзина</h2>
+{% for item in basket %}
+    <div>
+        {{item.name}}<br>
+        price: {{item.price}}<br>
+        <a href="/c=basket&a=???&id={{item.id}}">УДАЛИТЬ</a>
+    </div>
+    <hr>
+{%endfor%}
+<button class='formOrder'>Оформить заказ</button>
+<form class='hidden' id='formWithPhone' action='#' method='post'>
+    <input name='phone' placeholder="Введите ваш номер телефона">
+    <input type="submit" name="ok">
+</form>
