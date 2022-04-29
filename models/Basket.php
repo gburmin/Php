@@ -6,15 +6,25 @@ use app\engine\Db;
 
 class Basket extends DBModel
 {
-    public $id;
-    public $session_id;
-    public $product_id;
+    protected $id;
+    protected $session_id;
+    protected $product_id;
 
+    protected $props = [
+        'session_id' => false,
+        'product_id' => false
+    ];
 
-    public static function getBasket()
+    public function __construct($session_id = null, $product_id = null)
     {
-        $sql = "SELECT basket.id as basket_id, products.id as products_id, name, priceInBasket as price FROM `basket`, `products` WHERE basket.product_id = products.id";
-        return Db::getInstance()->queryAll($sql);
+        $this->session_id = $session_id;
+        $this->product_id = $product_id;
+    }
+
+    public static function getBasket($session_id)
+    {
+        $sql = "SELECT basket.id as basket_id, products.id as products_id, products.name, products.description, products.price FROM `basket`, `products` WHERE session_id = :session_id AND basket.product_id = products.id";
+        return Db::getInstance()->queryAll($sql, ['session_id' => $session_id]);
     }
 
     public static function getTableName()

@@ -2,10 +2,24 @@
 
 namespace app\controllers;
 
+use app\engine\Render;
+use app\engine\TwigRender;
+use app\interfaces\IRender;
+use app\models\Basket;
+use app\models\User;
+
 abstract class Controller
 {
     private $action;
     private $defaultAction = 'index';
+    private $render;
+
+
+    public function __construct(IRender $render)
+    {
+        $this->render = $render;
+    }
+
 
     public function runAction($action)
     {
@@ -18,20 +32,21 @@ abstract class Controller
         }
     }
 
-    protected function render($template, $params = [])
+    public function render($template, $params = [])
     {
         return $this->renderTemplate('layouts/main', [
-            'menu' => $this->renderTemplate('menu', $params),
+            'menu' => $this->renderTemplate('menu', [
+                'userName' => User::getName(),
+                'isAuth' => User::isAuth(),
+                'count' => Basket::getCountWhere('session_id', session_id())
+            ]),
             'content' => $this->renderTemplate($template, $params)
         ]);
     }
 
 
-    protected function renderTemplate($template, $params = [])
+    public function renderTemplate($template, $params = [])
     {
-        ob_start();
-        extract($params);
-        include VIEWS_DIR . $template . '.php';
-        return ob_get_clean();
+        return $this->render->renderTemplate($template, $params);
     }
 }

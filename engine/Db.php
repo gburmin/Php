@@ -22,14 +22,14 @@ class Db
     private function getConnection()
     {
         if (is_null($this->connection)) {
-            $this->connection = new \PDO(
-                $this->prepareDsnString(),
+            $this->connection = new \PDO($this->prepareDsnString(),
                 $this->config['login'],
                 $this->config['password']
             );
             $this->connection->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
         }
         return $this->connection;
+
     }
 
     public function lastInsertId()
@@ -39,8 +39,7 @@ class Db
 
     private function prepareDsnString()
     {
-        return sprintf(
-            "%s:host=%s;dbname=%s;charset=%s",
+        return sprintf("%s:host=%s;dbname=%s;charset=%s",
             $this->config['driver'],
             $this->config['host'],
             $this->config['database'],
@@ -63,13 +62,11 @@ class Db
         return $STH->fetch();
     }
 
-    public function queryLimit($sql, $limit)
-    {
+    public function queryLimit($sql, $limit) {
         $STH = $this->getConnection()->prepare($sql);
         $STH->bindValue(1, $limit, \PDO::PARAM_INT);
         $STH->execute();
         return $STH->fetchAll();
-        //TODO вернуть результат - сделано
     }
 
     public function queryOne($sql, $params = [])
@@ -86,4 +83,5 @@ class Db
     {
         return $this->query($sql, $params)->rowCount();
     }
+
 }
