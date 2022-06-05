@@ -69,7 +69,6 @@ class Db
         $STH->bindValue(1, $limit, \PDO::PARAM_INT);
         $STH->execute();
         return $STH->fetchAll();
-        //TODO вернуть результат - сделано
     }
 
     public function queryOne($sql, $params = [])
