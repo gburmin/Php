@@ -2,9 +2,8 @@
 
 namespace app\models;
 
-use app\interfaces\IModel;
 
-abstract class Model implements IModel
+abstract class Model
 {
     protected $props = [];
 
@@ -19,7 +18,8 @@ abstract class Model implements IModel
         return $this->$name;
     }
 
-
-
-
+    public function __isset($name)
+    {
+        return isset($this->$name);
+    }
 }
