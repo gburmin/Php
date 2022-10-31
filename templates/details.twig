@@ -1,0 +1,13 @@
+{% if isAdmin %}
+<h2>Детали</h2>
+{% for item in orderDetails %}
+    <div id= {{item.basket_id}}>
+        {{item.name}}<br>
+        {{item.description}}<br>
+        Текущая цена={{item.price}}<br>
+    </div>
+    <hr>
+{% endfor%}
+{% else %}
+<h2>Вы не админ!</h2>
+{% endif %}

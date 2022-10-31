@@ -1,0 +1,56 @@
+<h2>Корзина</h2>
+{% for item in basket %}
+    <div id= {{item.basket_id}}>
+        {{item.name}}<br>
+        {{item.description}}<br>
+        <button data-id="{{item.basket_id}}" class="delete"> Удалить </button>
+    </div>
+    <hr>
+{%endfor%}
+<button class='formOrder'>Начать оформление заказа</button>
+<form class='hidden form' id='formWithPhone' action='#' method='get'>
+    <input name='phone' id='phone' placeholder="Введите ваш номер телефона">
+    <input name="ok" id='formOrder' type="submit" placeholder="Оформить заказ" value="Оформить заказ" >
+</form>
+
+<script>
+ let buttons = document.querySelectorAll('.delete');
+ buttons.forEach((elem) => {
+   elem.addEventListener('click', () =>
+   {
+     let id = elem.getAttribute('data-id');
+     (
+       async () => {
+         const response = await fetch('/basket/delete/?id=' + id);
+         const answer = await response.json();
+         document.getElementById(id).remove();
+         document.getElementById('count').innerText = answer.count;
+       }
+     )();
+   })
+ })
+</script>
+
+<script>
+    let formOrder = document.querySelectorAll('.formOrder');
+    formOrder.forEach((elem) => {
+        elem.addEventListener('click', () => {
+            document.querySelector('#formWithPhone').classList.toggle('hidden');
+        })
+    })
+</script>
+
+<script>
+
+let form = document.getElementById('formWithPhone');
+form.addEventListener('submit',() => {
+  event.preventDefault();
+  let phone = document.getElementById('phone').value;
+    (       
+    async () => {
+         const response = await fetch('/order/formOrder/?phone=' + phone);
+         const answer = await response.json();
+       }
+    )();
+})
+</script>

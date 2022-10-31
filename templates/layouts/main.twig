@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+     <style>   
+    .hidden {
+    display:none;
+   }
+  </style>
 </head>
 <body>
-<?=$menu?>
-<?=$content?>
+{{ menu | raw }}
+{{ content | raw}}
 </body>
 </html>

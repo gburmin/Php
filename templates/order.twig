@@ -1,0 +1,14 @@
+{% if isAdmin %}
+<h2>Корзина</h2>
+{% for item in order %}
+    <div id= {{item.id}}>
+        {{item.session_id}}<br>
+        {{item.phone}}<br>
+        <a href="order/details/?id={{item.id}}"> Посмотреть детали </a>
+    </div>
+    <hr>
+{% endfor %}
+{% else %}
+<h2>Вы не админ!</h2>
+{% endif %}
+
